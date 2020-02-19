@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Basics.CustomPolicyProvider;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -34,6 +35,19 @@ namespace Basics.Controllers
             return View("Secret");
         }
 
+        [SecurityLevel(5)]
+        public IActionResult SecretLevel()
+        {
+            return View("Secret");
+        }
+
+        [SecurityLevel(15)]
+        public IActionResult SecretHigherLevel()
+        {
+            return View("Secret");
+        }
+
+        [AllowAnonymous]
         public IActionResult Authenticate()
         {
             var grandmaClaims = new List<Claim>()
@@ -42,6 +56,7 @@ namespace Basics.Controllers
                 new Claim(ClaimTypes.Email, "Bob@fmail.com"),
                 new Claim(ClaimTypes.DateOfBirth, "11/11/2019"),
                 new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(DynamicPolicies.SecurityLevel, "7"),
                 new Claim("Grandma.Says", "Very nice boy")
             };
 
@@ -59,6 +74,21 @@ namespace Basics.Controllers
             HttpContext.SignInAsync(userPrinciple);
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DoStuff([FromServices] IAuthorizationService authorizationService)
+        {
+            // Do stuff here
+            var builder = new AuthorizationPolicyBuilder("Schema");
+            var customePolicy = builder.RequireClaim("Hello").Build();
+            var authResult = await authorizationService.AuthorizeAsync(User, customePolicy);
+            var a = User.Identity;
+            if(authResult.Succeeded)
+            {
+                return View("index");
+            }
+
+            return View("Index");
         }
     }
 }
