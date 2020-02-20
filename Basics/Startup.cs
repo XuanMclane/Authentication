@@ -72,7 +72,7 @@ namespace Basics
                     config.Conventions.AuthorizePage("/Razor/Secured");
                     config.Conventions.AuthorizePage("/Razor/Policy", "Admin");
                     config.Conventions.AuthorizeFolder("/Razor/RazorSecured");
-                    config.Conventions.AllowAnonymousToPage("/Razor/RazorSecured/Anon")
+                    config.Conventions.AllowAnonymousToPage("/Razor/RazorSecured/Anon");
                 });
         }
 
