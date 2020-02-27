@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Controllers
+namespace Server.Controllers
 {
     public class OAuthController : Controller
     {
@@ -51,7 +51,8 @@ namespace Client.Controllers
             string grant_type,
             string code,
             string redirect_uri,
-            string client_id)
+            string client_id,
+            string refresh_token)
         {
             var claims = new[]
             {
@@ -71,7 +72,7 @@ namespace Client.Controllers
                 Constants.Audience,
                 claims,
                 notBefore: DateTime.Now,
-                expires: DateTime.Now.AddHours(1),
+                expires: grant_type == "refresh_token" ? DateTime.Now.AddMinutes(5) : DateTime.Now.AddMilliseconds(1),
                 signingCredentials
                 );
 
@@ -81,7 +82,8 @@ namespace Client.Controllers
             {
                 access_token,
                 token_type = "Bearer",
-                raw_claim = "oauthTutorial"
+                raw_claim = "oauthTutorial",
+                refresh_token = "RefreshTokenSampleValueSomething77"
             };
 
             var responseJson = JsonConvert.SerializeObject(responseObject);

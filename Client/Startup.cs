@@ -32,8 +32,8 @@ namespace Client
                     config.ClientId = "client_id";
                     config.ClientSecret = "client_secret";
                     config.CallbackPath = "/oauth/callback";
-                    config.AuthorizationEndpoint = "https://localhost:44344/oauth/authorize";
-                    config.TokenEndpoint = "https://localhost:44344/oauth/token";
+                    config.AuthorizationEndpoint = "https://localhost:44347/oauth/authorize";
+                    config.TokenEndpoint = "https://localhost:44347/oauth/token";
                     config.SaveTokens = true;
                     config.Events = new OAuthEvents
                     {
